@@ -18,10 +18,10 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", function (req, res) {
-  fs.writeFileSync("drawing.json", req.body);
-  res.send("Done");
+  fs.writeFileSync("drawing.json", JSON.stringify(req.body));
+  res.send(req.body);
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Sketch backend listening on port ${port}`);
 });
