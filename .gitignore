@@ -1,2 +1,4 @@
 node_modules
 drawing.json
+.DS_Store
+drawing.json
