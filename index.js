@@ -22,6 +22,21 @@ app.post("/", function (req, res) {
   res.send(req.body);
 });
 
+var currentdate = new Date();
+var datetime =
+  "Last start: " +
+  currentdate.getDate() +
+  "/" +
+  (currentdate.getMonth() + 1) +
+  "/" +
+  currentdate.getFullYear() +
+  " @ " +
+  currentdate.getHours() +
+  ":" +
+  currentdate.getMinutes() +
+  ":" +
+  currentdate.getSeconds();
+
 app.listen(port, () => {
-  console.log(`Sketch backend listening on port ${port}`);
+  console.log(`${datetime} - Sketch backend listening on port ${port}`);
 });
