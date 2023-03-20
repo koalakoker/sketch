@@ -1,18 +1,32 @@
 const { GCrypto } = require("./lib/gcrypto");
 const { mutableStdout } = require("./lib/mutable");
+const util = require("util");
 
-const readline = require("readline").createInterface({
+const rl = require("readline").createInterface({
   input: process.stdin,
   output: mutableStdout,
   terminal: true,
 });
+const question = util.promisify(rl.question).bind(rl);
 
-mutableStdout.muted = false;
+function inputPass() {
+  return new Promise((resolve) => {
+    question("Password:").then((password) => {
+      resolve(password);
+    });
+    mutableStdout.muted = true;
+  });
+}
 
-readline.question("Password:", (password) => {
+async function login() {
+  mutableStdout.muted = false;
+  const email = await question("Username(email):");
+  const password = await inputPass();
+
   console.log();
-  console.log(GCrypto.hash(password));
-  readline.close();
-});
+  console.log("username:" + email);
+  console.log("hash pass:" + GCrypto.hash(password));
+  rl.close();
+}
 
-mutableStdout.muted = true;
+login();
