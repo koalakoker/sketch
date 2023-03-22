@@ -6,6 +6,9 @@ import { httpGet } from "./lib/httpGet.js";
 import jwt from "jsonwebtoken";
 import config from "config";
 
+let apiurl;
+let jwtPrivateKey;
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: mutableStdout,
@@ -30,14 +33,13 @@ async function login() {
   rl.close();
 
   const body = { email: email, password: GCrypto.hash(password) };
-  const url = config.get("apiurl");
+  const url = apiurl;
   const response = await httpGet(url, body);
-  //const data = await response.text();
   const token = response.headers.get("x-auth-token");
   if (!token) {
     console.log("Not authorized");
   } else {
-    jwt.verify(token, config.get("jwtPrivateKey"), (err, decoded) => {
+    jwt.verify(token, jwtPrivateKey, (err, decoded) => {
       if (err) {
         console.log("JWT invalid signature.");
         return;
@@ -47,8 +49,17 @@ async function login() {
   }
 }
 
-if (!config.get("jwtPrivateKey")) {
-  console.log("Fatal error: jwtPrivateKey not set in an environment variable");
+jwtPrivateKey = config.get("jwtPrivateKey");
+if (!jwtPrivateKey) {
+  console.log(
+    "Fatal error: glinks_jwtPrivateKey not set in an environment variable"
+  );
+  process.exit(1);
+}
+
+apiurl = config.get("apiurl");
+if (!apiurl) {
+  console.log("Fatal error: glinks_apiurl not set in an environment variable");
   process.exit(1);
 }
 
