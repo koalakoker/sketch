@@ -30,7 +30,7 @@ async function login() {
   rl.close();
 
   const body = { email: email, password: GCrypto.hash(password) };
-  const url = "https://woven-name-321505.appspot.com/api/auth/";
+  const url = config.get("apiurl");
   const response = await httpGet(url, body);
   //const data = await response.text();
   const token = response.headers.get("x-auth-token");
