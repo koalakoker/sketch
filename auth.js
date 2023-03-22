@@ -3,6 +3,8 @@ import { mutableStdout } from "./lib/mutable.js";
 import { promisify } from "node:util";
 import * as readline from "readline";
 import { httpGet } from "./lib/httpGet.js";
+import jwt from "jsonwebtoken";
+import config from "config";
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -35,8 +37,19 @@ async function login() {
   if (!token) {
     console.log("Not authorized");
   } else {
-    console.log(token);
+    jwt.verify(token, config.get("jwtPrivateKey"), (err, decoded) => {
+      if (err) {
+        console.log("JWT invalid signature.");
+        return;
+      }
+      console.log(decoded);
+    });
   }
+}
+
+if (!config.get("jwtPrivateKey")) {
+  console.log("Fatal error: jwtPrivateKey not set in an environment variable");
+  process.exit(1);
 }
 
 login();

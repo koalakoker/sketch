@@ -1,0 +1,4 @@
+{
+  "dbConnection": "glinks_dbConnection",
+  "jwtPrivateKey": "glinks_jwtPrivateKey"
+}
