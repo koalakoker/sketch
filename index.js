@@ -1,26 +1,15 @@
-("use strict");
-const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
+import cors from "cors";
+import express from "express";
+
+import { router as drawing } from "./routes/drawing.js";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  fs.readFile("drawing.json", (err, data) => {
-    if (err) throw err;
-    let obj = JSON.parse(data);
-    res.send(obj);
-  });
-});
-
-app.post("/", function (req, res) {
-  fs.writeFileSync("drawing.json", JSON.stringify(req.body));
-  res.send(req.body);
-});
+app.use("/api/drawing", drawing);
 
 var currentdate = new Date();
 var datetime =
