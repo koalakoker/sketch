@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { datetime } from "./lib/dateTime.js";
 
 import { router as drawing } from "./routes/drawing.js";
 
@@ -11,21 +12,6 @@ app.use(cors());
 
 app.use("/api/drawing", drawing);
 
-var currentdate = new Date();
-var datetime =
-  "Last start: " +
-  currentdate.getDate() +
-  "/" +
-  (currentdate.getMonth() + 1) +
-  "/" +
-  currentdate.getFullYear() +
-  " @ " +
-  currentdate.getHours() +
-  ":" +
-  currentdate.getMinutes() +
-  ":" +
-  currentdate.getSeconds();
-
 app.listen(port, () => {
-  console.log(`${datetime} - Sketch backend listening on port ${port}`);
+  console.log(`${datetime()} - Sketch backend listening on port ${port}`);
 });
